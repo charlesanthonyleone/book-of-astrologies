@@ -177,6 +177,9 @@ idx=idx.replace('%%NEV%%',str(len(tl)))
 open(OUT+'index.html','w').write(page('Book of Astrologies · Charles Leone',idx,0,'home'))
 for name,act,t in [('gallery','gallery','Gallery'),('search','search','Search'),('timeline','timeline','Timeline 2026–2035')]:
     open(f'{OUT}{name}.html','w').write(page(t+' · Book of Astrologies',open(f'src/{name}.html').read(),0,act))
+_t=markdown.markdown(open('src/thirteenth.md').read(),extensions=['extra','sane_lists'])
+_t=re.sub(r'<ol start="(\d+)">',lambda m:f'<ol start="{m.group(1)}" style="counter-reset:list-item {int(m.group(1))-1}">',_t)
+open(OUT+'thirteenth.html','w').write(page('100 Things About the 13th Child · Book of Astrologies','<article class="prose">'+_t+'<p><a href="assets/100_things_13th_child.pdf">Download PDF</a></p></article>',0,'thirteenth','100 things about the thirteenth child: Charles Leone, born 13 October 1998.'))
 meta=[{'n':c['n'],'slug':c['slug'],'school':c['school']} for c in chapters]
 os.makedirs(OUT+'data',exist_ok=True)
 json.dump({'schools':meta,'imgs':[{k:r[k] for k in ('f','cap','school','type','sec')} for r in allimgs]},open(OUT+'data/images.json','w'),ensure_ascii=False,separators=(',',':'))
